@@ -25,13 +25,25 @@ class _CalendarScreenState extends State<CalendarScreen> {
       context: context,
       builder: (_) {
         return AlertDialog(
-          title: const Text("Add Meal"),
+          backgroundColor: Colors.white,
+          title: const Text("Add Meal", style: TextStyle(color: Color(0xFF4A148C))),
           content: SingleChildScrollView(
             child: Column(
               children: [
-                TextField(controller: nameController, decoration: const InputDecoration(labelText: "Meal Name")),
-                TextField(controller: kcalController, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: "Kcal")),
+                TextField(
+                  controller: nameController,
+                  decoration: const InputDecoration(labelText: "Meal Name"),
+                ),
+                TextField(
+                  controller: kcalController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(labelText: "Kcal"),
+                ),
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFFFF84B7),
+                    foregroundColor: Colors.white,
+                  ),
                   onPressed: () async {
                     final pickedTime = await showTimePicker(context: context, initialTime: time);
                     if (pickedTime != null) setState(() => time = pickedTime);
@@ -39,6 +51,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   child: const Text("Pick Time"),
                 ),
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFFB388EB),
+                    foregroundColor: Colors.white,
+                  ),
                   onPressed: () async {
                     final picker = ImagePicker();
                     final picked = await picker.pickImage(source: ImageSource.gallery);
@@ -46,6 +62,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   },
                   child: const Text("Pick Image"),
                 ),
+
               ],
             ),
           ),
@@ -82,10 +99,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Nutrition"),
-        backgroundColor: Colors.teal.shade200,
+        backgroundColor: const Color(0xFFFF84B7),
         actions: [
           IconButton(
-            icon: const Icon(Icons.calendar_today),
+            icon: const Icon(Icons.calendar_today, color: Colors.white),
             onPressed: () async {
               final picked = await showDatePicker(
                 context: context,
@@ -100,63 +117,78 @@ class _CalendarScreenState extends State<CalendarScreen> {
           )
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text("Hi, Malika & Dana 👋", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 20),
-            Center(
-              child: CircularPercentIndicator(
-                radius: 80.0,
-                lineWidth: 12.0,
-                animation: true,
-                percent: totalKcal / 2000 > 1 ? 1 : totalKcal / 2000,
-                center: Text(
-                  "${2000 - totalKcal} KCAL left",
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFFFFF0F8), Color(0xFFE1BEE7)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text("Hi, Malika & Dana 👋", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFF4A148C))),
+              const SizedBox(height: 20),
+              Center(
+                child: CircularPercentIndicator(
+                  radius: 80.0,
+                  lineWidth: 12.0,
+                  animation: true,
+                  percent: totalKcal / 2000 > 1 ? 1 : totalKcal / 2000,
+                  center: Text(
+                    "${2000 - totalKcal} KCAL left",
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF6A1B9A)),
+                  ),
+                  circularStrokeCap: CircularStrokeCap.round,
+                  progressColor: const Color(0xFFB388EB),
+                  backgroundColor: Colors.white,
                 ),
-                circularStrokeCap: CircularStrokeCap.round,
-                progressColor: Colors.orange,
               ),
-            ),
-            const SizedBox(height: 20),
-            const Text("Today's Meals", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-            const SizedBox(height: 10),
-            Expanded(
-              child: meals.isEmpty
-                  ? const Center(child: Text("No meals today"))
-                  : ListView.builder(
-                itemCount: meals.length,
-                itemBuilder: (context, index) {
-                  final meal = meals[index];
-                  return Card(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                    child: ListTile(
-                      leading: meal["image"] != null
-                          ? ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.file(meal["image"], width: 48, height: 48, fit: BoxFit.cover),
-                      )
-                          : const Icon(Icons.fastfood),
-                      title: Text(meal["name"], style: const TextStyle(fontWeight: FontWeight.bold)),
-                      subtitle: Text("${meal["kcal"]} kcal • ${meal["time"]}"),
-                    ),
-                  );
-                },
+              const SizedBox(height: 20),
+              const Text("Today's Meals", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Color(0xFF4A148C))),
+              const SizedBox(height: 10),
+              Expanded(
+                child: meals.isEmpty
+                    ? const Center(child: Text("No meals today", style: TextStyle(color: Color(0xFF6A1B9A))))
+                    : ListView.builder(
+                  itemCount: meals.length,
+                  itemBuilder: (context, index) {
+                    final meal = meals[index];
+                    return Card(
+                      color: Colors.white,
+                      elevation: 6,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                      child: ListTile(
+                        leading: meal["image"] != null
+                            ? ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Image.file(meal["image"], width: 48, height: 48, fit: BoxFit.cover),
+                        )
+                            : const Icon(Icons.fastfood, color: Color(0xFFB388EB)),
+                        title: Text(meal["name"], style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF4A148C))),
+                        subtitle: Text("${meal["kcal"]} kcal • ${meal["time"]}", style: const TextStyle(color: Color(0xFF6A1B9A))),
+                      ),
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addMeal,
-        backgroundColor: Colors.orange,
-        child: const Icon(Icons.add),
+        backgroundColor: const Color(0xFFB388EB),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: const Color(0xFFFFE4EC),
+        selectedItemColor: const Color(0xFFB388EB),
+        unselectedItemColor: Colors.grey,
         currentIndex: 0,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
