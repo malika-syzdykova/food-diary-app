@@ -14,8 +14,12 @@ class FoodDiaryApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Food Diary',
       theme: ThemeData(
-        primarySwatch: Colors.teal,
-        scaffoldBackgroundColor: const Color(0xFFF7FDFB),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Color(0xFFB388EB),
+          primary: Color(0xFFFF84B7),
+          secondary: Color(0xFFB388EB),
+        ),
+        scaffoldBackgroundColor: Color(0xFFFFF0F8),
         fontFamily: 'Roboto',
         useMaterial3: true,
       ),
