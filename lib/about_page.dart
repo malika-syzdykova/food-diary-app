@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AboutPage extends StatelessWidget {
-  const AboutPage({super.key});
+  const AboutPage({super.key}); 
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,8 @@ class AboutPage extends StatelessWidget {
             ),
             SizedBox(height: 10),
             Text(
-              'This app helps you track your meals and nutrition daily.',
+              'Food Diary is a mobile app that helps users track what they eat throughout the day. '
+                  'It promotes mindful eating and supports a healthy lifestyle by providing an easy way to monitor nutrition habits.',
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 20),
@@ -31,9 +32,9 @@ class AboutPage extends StatelessWidget {
             ),
             SizedBox(height: 10),
             Text(
-              'Developed by Rakhmetova Uldana, Syzdykova Malika\n'
-                  'Crossplatform Development – Astana IT University\n'
-                  'Mentor: Assistant Professor Abzal Kyzyrkanov',
+              'Developed by Rakhmetova Uldana, Syzdykova Malika in the scope of the course '
+                  '“Crossplatform Development” at Astana IT University.\n\n'
+                  'Mentor (Teacher): Assistant Professor Abzal Kyzyrkanov',
               style: TextStyle(fontSize: 16),
             ),
           ],
