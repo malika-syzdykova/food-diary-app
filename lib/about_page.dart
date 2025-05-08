@@ -5,37 +5,39 @@ class AboutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('About'),
-        backgroundColor: Color(0xFFFF84B7),
+        backgroundColor: const Color(0xFFFF84B7),
       ),
-      body: const Padding(
-        padding: EdgeInsets.all(16.0),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Food Diary App',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFF4A148C)),
+              style: textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Text(
               'Food Diary is a mobile app that helps users track what they eat throughout the day. '
                   'It promotes mindful eating and supports a healthy lifestyle by providing an easy way to monitor nutrition habits.',
-              style: TextStyle(fontSize: 16, color: Color(0xFF6A1B9A)),
+              style: textTheme.bodyLarge,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Text(
               'Credits',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF4A148C)),
+              style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Text(
               'Developed by Rakhmetova Uldana, Syzdykova Malika in the scope of the course '
                   '“Crossplatform Development” at Astana IT University.\n\n'
                   'Mentor (Teacher): Assistant Professor Abzal Kyzyrkanov',
-              style: TextStyle(fontSize: 16, color: Color(0xFF6A1B9A)),
+              style: textTheme.bodyLarge,
             ),
           ],
         ),

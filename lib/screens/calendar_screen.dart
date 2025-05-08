@@ -1,7 +1,7 @@
-
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import '../about_page.dart';
@@ -35,11 +35,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
             children: [
               TextField(
                 controller: nameController,
+                keyboardType: TextInputType.name,
+                textInputAction: TextInputAction.next,
                 decoration: const InputDecoration(labelText: "Meal Name"),
               ),
               TextField(
                 controller: kcalController,
                 keyboardType: TextInputType.number,
+                textInputAction: TextInputAction.done,
                 decoration: const InputDecoration(labelText: "Kcal"),
               ),
               const SizedBox(height: 12),
@@ -81,8 +84,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
             onPressed: () {
               if (nameController.text.isNotEmpty &&
                   kcalController.text.isNotEmpty) {
-                final key =
-                    "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}";
+                final key = DateFormat('yyyy-MM-dd').format(selectedDate);
                 mealsByDate.putIfAbsent(key, () => []);
                 mealsByDate[key]!.add({
                   "name": nameController.text,
@@ -103,10 +105,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final key = "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}";
+    final key = DateFormat('yyyy-MM-dd').format(selectedDate);
     final meals = mealsByDate[key] ?? [];
-    final totalKcal =
-    meals.fold(0, (sum, item) => sum + int.parse(item['kcal'] as String));
+    final totalKcal = meals.fold(
+        0,
+            (sum, item) =>
+        sum + (int.tryParse(item['kcal'] as String) ?? 0));
 
     return Scaffold(
       appBar: AppBar(
@@ -115,8 +119,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
           IconButton(
             icon: const Icon(Icons.brightness_6),
             onPressed: () {
-              Provider.of<ThemeProvider>(context, listen: false)
-                  .toggleTheme();
+              Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
             },
           ),
           IconButton(
@@ -129,6 +132,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 lastDate: DateTime(2100),
               );
               if (picked != null) setState(() => selectedDate = picked);
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              Navigator.pushNamed(context, '/settings');
             },
           ),
         ],
@@ -185,44 +194,54 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     ? Center(
                   child: Text("No meals today",
                       style: TextStyle(
-                          color:
-                          Theme.of(context).colorScheme.secondary)),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .secondary)),
                 )
                     : ListView.builder(
                   itemCount: meals.length,
                   itemBuilder: (context, index) {
                     final meal = meals[index];
-                    return Card(
-                      color: Theme.of(context).cardColor,
-                      elevation: 6,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      child: ListTile(
-                        leading: meal["image"] != null
-                            ? ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.file(
-                            meal["image"],
-                            width: 48,
-                            height: 48,
-                            fit: BoxFit.cover,
-                          ),
-                        )
-                            : Icon(Icons.fastfood,
-                            color:
-                            Theme.of(context).colorScheme.secondary),
-                        title: Text(meal["name"] as String,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .primary)),
-                        subtitle: Text(
-                          "${meal["kcal"]} kcal • ${meal["time"]}",
-                          style: TextStyle(
+                    return GestureDetector(
+                      onLongPress: () {
+                        setState(() {
+                          meals.removeAt(index);
+                        });
+                      },
+                      child: Card(
+                        color: Theme.of(context).cardColor,
+                        elevation: 6,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        child: ListTile(
+                          leading: meal["image"] != null
+                              ? ClipRRect(
+                            borderRadius:
+                            BorderRadius.circular(12),
+                            child: Image.file(
+                              meal["image"],
+                              width: 48,
+                              height: 48,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                              : Icon(Icons.fastfood,
                               color: Theme.of(context)
                                   .colorScheme
                                   .secondary),
+                          title: Text(meal["name"] as String,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primary)),
+                          subtitle: Text(
+                            "${meal["kcal"]} kcal • ${meal["time"]}",
+                            style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .secondary),
+                          ),
                         ),
                       ),
                     );
@@ -244,8 +263,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
         currentIndex: 0,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.info_outline), label: 'About'),
+          BottomNavigationBarItem(icon: Icon(Icons.info_outline), label: 'About'),
         ],
         onTap: (index) {
           if (index == 1) {
